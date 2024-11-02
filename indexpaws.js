@@ -77,12 +77,15 @@ class PawsClient {
         if (attempt === maxRetries) {
           throw error;
         }
-        this.log(
-          `Lần thử ${attempt}/${maxRetries} thất bại: ${
-            error.message
-          }. Thử lại sau ${retryDelay / 1000}s...`,
-          "warning"
-        );
+        if (error.status !== 407) {
+          this.log(
+            `Lần thử ${attempt}/${maxRetries} thất bại: ${
+              error.message
+            }. Thử lại sau ${retryDelay / 1000}s...`,
+            "warning"
+          );
+        }
+
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
         attempt++;
       }
